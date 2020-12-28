@@ -7,7 +7,7 @@ import yaml
 from typing import Optional
 
 
-def get_settings_path():
+def get_settings_path() -> str:
     parent_dir_path = os.path.dirname(__file__)
     return os.path.join(parent_dir_path, "settings.yaml")
 
