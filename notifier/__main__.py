@@ -1,9 +1,9 @@
 #!/usr/bin/python
 
-import yaml
-import requests
 import argparse
 import os
+import requests
+import yaml
 from typing import Optional
 
 
