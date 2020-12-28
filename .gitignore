@@ -1,0 +1,9 @@
+# Private config
+settings.yaml
+
+# PyCharm stuff
+.idea/
+
+# Bytecode
+__pycache__/
+*.pyc
