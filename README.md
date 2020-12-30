@@ -4,7 +4,7 @@ A simple CLI written in Python for sending a message to a Telegram chat using th
 ## usage
 Save bot information in settings by using:
     
-    py notifier --chat_id XXXX --api_key YYYY
+    py notifier --chat_id XXXX --token YYYY
     
 - ```XXXX```: the [unique identifier](https://core.telegram.org/bots/api#sendmessage) for a target chat.
 - ```YYYY```: the bot [token](https://core.telegram.org/bots/api#making-requests).
