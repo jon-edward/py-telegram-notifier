@@ -3,8 +3,8 @@
 import argparse
 import os
 import requests
-import yaml
 from typing import Optional
+import yaml
 
 
 def get_settings_path() -> str:
