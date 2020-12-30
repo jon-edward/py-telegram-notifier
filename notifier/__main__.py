@@ -7,7 +7,7 @@ from typing import Optional
 import yaml
 
 
-REL_SETTINGS_PATH = "settings.yaml"
+REL_SETTINGS_PATH = "./settings.yaml"
 
 
 def get_settings_path() -> str:
@@ -42,7 +42,7 @@ if __name__ == "__main__":
     arg_parser.add_argument("--silence_message", action="store_true", dest="silenced",
                             help=f"silences default '{default_message}' message to chat when no message is specified")
     args = arg_parser.parse_args()
-    config = set_config(args.chat_id, args.api_key)
+    config = set_config(args.chat_id, args.token)
     if not config or not config.get("chat_id", False) or not config.get("token", False):
         raise Exception("Config file not valid. Use --token and --api_key options to set config values.")
     if not args.silenced:
