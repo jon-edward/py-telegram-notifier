@@ -7,7 +7,8 @@ from typing import Optional
 import yaml
 
 
-REL_SETTINGS_PATH = "./settings.yaml"
+REL_SETTINGS_PATH = "settings.yaml"
+DEFAULT_MESSAGE = "!"
 
 
 def get_settings_path() -> str:
@@ -16,17 +17,18 @@ def get_settings_path() -> str:
 
 
 def get_config() -> dict:
-    if not os.path.exists(get_settings_path()):
+    to_settings = get_settings_path()
+    if not os.path.exists(to_settings):
         return dict()
-    with open(get_settings_path(), 'r') as config_stream:
+    with open(to_settings, 'r') as config_stream:
         config_data = yaml.load(config_stream, Loader=yaml.FullLoader)
         return dict() if config_data is None else config_data
 
 
-def set_config(chat_id: Optional[int] = None, api_key: Optional[str] = None) -> dict:
+def set_config(chat_id: Optional[int] = None, token: Optional[str] = None) -> dict:
     config_data = get_config()
     config_data["chat_id"] = chat_id if chat_id else config_data.get("chat_id", None)
-    config_data["token"] = api_key if api_key else config_data.get("token", None)
+    config_data["token"] = token if token else config_data.get("token", None)
     with open(get_settings_path(), 'w') as to_update_stream:
         yaml.dump(config_data, to_update_stream, Dumper=yaml.Dumper)
         return config_data
@@ -35,12 +37,11 @@ def set_config(chat_id: Optional[int] = None, api_key: Optional[str] = None) -> 
 if __name__ == "__main__":
     arg_parser = argparse.ArgumentParser(description="A simple usage of the Telegram Bot API.",
                                          allow_abbrev=True)
-    default_message = "!"
     arg_parser.add_argument("--chat_id", type=str, help="sets the chat_id in settings")
     arg_parser.add_argument("--token", type=str, help="sets the bot token in settings")
-    arg_parser.add_argument("--text", type=str, default=default_message, help="specifies the message to send to chat")
+    arg_parser.add_argument("--text", type=str, default=DEFAULT_MESSAGE, help="specifies the message to send to chat")
     arg_parser.add_argument("--silence_message", action="store_true", dest="silenced",
-                            help=f"silences default '{default_message}' message to chat when no message is specified")
+                            help=f"silences default '{DEFAULT_MESSAGE}' message to chat when no message is specified")
     args = arg_parser.parse_args()
     config = set_config(args.chat_id, args.token)
     if not (config and config.get("chat_id", False) and config.get("token", False)):
