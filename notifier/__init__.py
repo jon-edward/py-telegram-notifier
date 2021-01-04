@@ -1,5 +1,5 @@
 from datetime import datetime
-from config import Config
+from tools import Config
 from __main__ import get_settings_path
 import traceback
 

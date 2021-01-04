@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import argparse
-from config import Config
+from tools import Config
 import os
 import requests
 
