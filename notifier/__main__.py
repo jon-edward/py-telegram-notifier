@@ -1,10 +1,9 @@
 #!/usr/bin/python
 
 import argparse
+from config import Config
 import os
 import requests
-from typing import Optional
-import yaml
 
 
 REL_SETTINGS_PATH = "settings.yaml"
@@ -16,25 +15,6 @@ def get_settings_path() -> str:
     return os.path.join(parent_dir_path, REL_SETTINGS_PATH)
 
 
-def get_config() -> dict:
-    to_settings = get_settings_path()
-    if not os.path.exists(to_settings):
-        return dict()
-    with open(to_settings, 'r') as config_stream:
-        config_data = yaml.load(config_stream, Loader=yaml.FullLoader)
-        return dict() if config_data is None else config_data
-
-
-# TODO: Make config a class, add a save method that does basically this
-def set_config(chat_id: Optional[int] = None, token: Optional[str] = None) -> dict:
-    config_data = get_config()
-    config_data["chat_id"] = chat_id if chat_id else config_data.get("chat_id", None)
-    config_data["token"] = token if token else config_data.get("token", None)
-    with open(get_settings_path(), 'w') as to_update_stream:
-        yaml.dump(config_data, to_update_stream, Dumper=yaml.Dumper)
-        return config_data
-
-
 if __name__ == "__main__":
     arg_parser = argparse.ArgumentParser(description="A simple usage of the Telegram Bot API.",
                                          allow_abbrev=True)
@@ -43,12 +23,25 @@ if __name__ == "__main__":
     arg_parser.add_argument("--text", type=str, default=DEFAULT_MESSAGE, help="specifies the message to send to chat")
     arg_parser.add_argument("--silence_message", action="store_true", dest="silenced",
                             help=f"silences default '{DEFAULT_MESSAGE}' message to chat when no message is specified")
+    arg_parser.add_argument("--suppress_save", action="store_true", help="suppresses saving entries to settings")
     args = arg_parser.parse_args()
-    config = set_config(args.chat_id, args.token)
-    if not (config and config.get("chat_id", False) and config.get("token", False)):
-        raise Exception("Config file not valid. Use --token and --api_key options to set config values.")
+    config = Config(get_settings_path())
+
+    update_config_dict = {
+        "chat_id": args.chat_id,
+        "token": args.token
+    }
+
+    for item_key, item_value in update_config_dict.items():
+        if item_value is not None:
+            config.update_entries({item_key: item_value})
+
+    if not config.validate_keys():
+        raise Exception("Settings file not valid. Use --token and --api_key options to set settings entries.")
+    elif not args.suppress_save:
+        config.save()
     if not args.silenced:
-        data = {"chat_id": config["chat_id"], "text": args.text}
-        bot_url = f"https://api.telegram.org/bot{config['token']}/sendMessage"
+        data = {"chat_id": config.get_entry('chat_id'), "text": args.text}
+        bot_url = f"https://api.telegram.org/bot{config.get_entry('token')}/sendMessage"
         response = requests.post(bot_url, data=data)
         print(response)
