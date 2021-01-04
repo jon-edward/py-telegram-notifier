@@ -25,6 +25,7 @@ def get_config() -> dict:
         return dict() if config_data is None else config_data
 
 
+# TODO: Make config a class, add a save method that does basically this
 def set_config(chat_id: Optional[int] = None, token: Optional[str] = None) -> dict:
     config_data = get_config()
     config_data["chat_id"] = chat_id if chat_id else config_data.get("chat_id", None)
