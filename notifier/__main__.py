@@ -25,21 +25,23 @@ if __name__ == "__main__":
                             help=f"silences default '{DEFAULT_MESSAGE}' message to chat when no message is specified")
     arg_parser.add_argument("--suppress_save", action="store_true", help="suppresses saving entries to settings")
     args = arg_parser.parse_args()
+
     config = Config(get_settings_path())
 
-    update_config_dict = {
+    update_config_entries = {
         "chat_id": args.chat_id,
         "token": args.token
     }
 
-    for item_key, item_value in update_config_dict.items():
+    for item_key, item_value in update_config_entries.items():
         if item_value is not None:
             config.update_entries({item_key: item_value})
 
     if not config.validate_keys():
-        raise Exception("Settings file not valid. Use --token and --api_key options to set settings entries.")
+        raise Exception("Settings not valid. Use --token and --api_key options to set settings entries.")
     elif not args.suppress_save:
         config.save()
+
     if not args.silenced:
         data = {"chat_id": config.get_entry('chat_id'), "text": args.text}
         bot_url = f"https://api.telegram.org/bot{config.get_entry('token')}/sendMessage"
