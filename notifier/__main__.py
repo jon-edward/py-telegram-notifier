@@ -1,18 +1,10 @@
 #!/usr/bin/python
 
 import argparse
-from tools import Config
-import os
-import requests
+from tools import Config, send_message, get_settings_path
 
 
-REL_SETTINGS_PATH = "settings.yaml"
 DEFAULT_MESSAGE = "!"
-
-
-def get_settings_path() -> str:
-    parent_dir_path = os.path.dirname(__file__)
-    return os.path.join(parent_dir_path, REL_SETTINGS_PATH)
 
 
 if __name__ == "__main__":
@@ -43,7 +35,4 @@ if __name__ == "__main__":
         config.save()
 
     if not args.silenced:
-        data = {"chat_id": config.get_entry('chat_id'), "text": args.text}
-        bot_url = f"https://api.telegram.org/bot{config.get_entry('token')}/sendMessage"
-        response = requests.post(bot_url, data=data)
-        print(response)
+        print(send_message(config, args.text))
