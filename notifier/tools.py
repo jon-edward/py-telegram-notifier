@@ -7,13 +7,15 @@ REL_SETTINGS_PATH = "settings.yaml"
 
 
 class Config:
-    def __init__(self, from_file: str = None) -> None:
+    def __init__(self) -> None:
         self.required_keys = {"chat_id", "token"}
-        self.settings_file_path = from_file
-        if not from_file or not os.path.exists(from_file):
+        self.settings_file_path = get_settings_path()
+        if os.path.exists(self.settings_file_path):
             self.entries = dict()
+            f = open(get_settings_path(), 'w')
+            f.close()
         else:
-            with open(from_file, 'r') as config_stream:
+            with open(self.settings_file_path, 'r') as config_stream:
                 config_data = yaml.load(config_stream, Loader=yaml.FullLoader)
                 self.entries = dict() if config_data is None else config_data
 
@@ -23,10 +25,10 @@ class Config:
     def get_entry(self, key) -> Optional[Union[int, str]]:
         return self.entries.get(key, None)
 
-    def save(self, settings_file_path: str = "") -> None:
-        if self.settings_file_path is None and not settings_file_path:
+    def save(self) -> None:
+        if self.settings_file_path is None:
             raise AttributeError("settings file path is not defined")
-        with open(self.settings_file_path if self.settings_file_path else settings_file_path, 'w') as to_update_stream:
+        with open(self.settings_file_path, 'w') as to_update_stream:
             yaml.dump(self.entries, to_update_stream, Dumper=yaml.Dumper)
 
     def validate_keys(self) -> bool:
