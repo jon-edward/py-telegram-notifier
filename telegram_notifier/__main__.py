@@ -8,7 +8,7 @@ if __name__ == "__main__":
                                          allow_abbrev=True)
     arg_parser.add_argument("--chat_id", type=str, help="sets the chat_id in settings")
     arg_parser.add_argument("--token", type=str, help="sets the bot token in settings")
-    arg_parser.add_argument("--text", type=str, help="specifies the message to send to chat")
+    arg_parser.add_argument("--message", type=str, help="specifies the message to send to chat")
     args = arg_parser.parse_args()
 
     set_config_options(chat_id=args.chat_id, token=args.token)
@@ -18,6 +18,6 @@ if __name__ == "__main__":
         raise InvalidConfigError("Settings not valid. Use --token and --chat_id options to set settings entries.")
 
     if args.text:
-        print(send_message(args.text))
+        print(send_message(args.message))
     elif args.text is "":
-        raise EmptyMessageError("Cannot use an empty string with --text option.")
+        raise EmptyMessageError("Cannot use an empty string with --message option.")
