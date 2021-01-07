@@ -24,9 +24,12 @@ class Notifier:
         time_duration = datetime.now() - self.start_time
         exit_message_format = self.succeeded_message_format if exc_type is None else self.failed_message_format
         formatted_tb = "\n".join(traceback.format_tb(exc_tb)).strip()
-        message = exit_message_format.format(time_duration=time_duration,
-                                             exc_type="" if exc_type is None else exc_type.__name__,
-                                             exc_val=exc_val,
-                                             exc_tb=formatted_tb,
-                                             description=self.description)
+        format_data = {
+            "time_duration": time_duration,
+            "exc_type": "" if exc_type is None else exc_type.__name__,
+            "exc_val": exc_val,
+            "exc_tb": formatted_tb,
+            "description": self.description
+        }
+        message = exit_message_format.format(**format_data)
         print(send_message(message, parse_mode="MarkdownV2"))
