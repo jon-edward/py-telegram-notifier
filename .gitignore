@@ -4,6 +4,10 @@
 # PyCharm stuff
 .idea/
 
+# Packaging stuff
+*.egg-info
+dist/
+
 # Bytecode
 __pycache__/
 *.pyc
