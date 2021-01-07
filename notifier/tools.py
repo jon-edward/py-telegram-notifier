@@ -11,10 +11,10 @@ def send_message(message: str, **kwargs) -> Optional[Response]:
     config.read(CONFIG_PATH)
     if not message:
         return
-    data = {"chat_id": config.get_entry('chat_id'),
+    data = {"chat_id": config.get("DEFAULT", "chat_id"),
             "text": message}
     data.update(kwargs)
-    bot_url = f"https://api.telegram.org/bot{config.get_entry('token')}/sendMessage"
+    bot_url = f"https://api.telegram.org/bot{config.get('DEFAULT', 'token')}/sendMessage"
     return post(bot_url, data=data)
 
 

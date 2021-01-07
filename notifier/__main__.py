@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import argparse
-from tools import send_message, update_config, get_config, validate_config
+from .tools import send_message, update_config, get_config, validate_config
 
 
 if __name__ == "__main__":
