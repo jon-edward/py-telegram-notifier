@@ -1,8 +1,7 @@
 #!/usr/bin/python
 
 import argparse
-from .tools import send_message, set_config_options, get_config, config_is_valid
-
+from .tools import send_message, set_config_options, get_config, config_is_valid, InvalidConfigError
 
 if __name__ == "__main__":
     arg_parser = argparse.ArgumentParser(description="A simple usage of the Telegram Bot API.",
@@ -16,7 +15,7 @@ if __name__ == "__main__":
     config = get_config()
 
     if not config_is_valid():
-        raise Exception("Settings not valid. Use --token and --chat_id options to set settings entries.")
+        raise InvalidConfigError("Settings not valid. Use --token and --chat_id options to set settings entries.")
 
     if args.text:
         print(send_message(args.text))
