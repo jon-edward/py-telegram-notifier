@@ -1,6 +1,5 @@
 # Private config
-settings.yaml
-config.ini
+*.ini
 
 # PyCharm stuff
 .idea/
