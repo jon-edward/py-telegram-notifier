@@ -18,8 +18,7 @@ class Notifier:
     def __enter__(self):
         self.start_time = datetime.now()
         message = self.started_message_format.format(description=self.description)
-        escaped_message = escape_specials(message)
-        print(send_message(escaped_message, parse_mode="MarkdownV2"))
+        print(send_message(message, parse_mode="MarkdownV2"))
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         time_duration = datetime.now() - self.start_time
@@ -30,5 +29,4 @@ class Notifier:
                                              exc_val=exc_val,
                                              exc_tb=formatted_tb,
                                              description=self.description)
-        escaped_message = escape_specials(message)
-        print(send_message(escaped_message, parse_mode="MarkdownV2"))
+        print(send_message(message, parse_mode="MarkdownV2"))

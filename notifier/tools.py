@@ -12,7 +12,7 @@ def send_message(message: str, **kwargs) -> Optional[Response]:
     if not message:
         return
     data = {"chat_id": config.get("DEFAULT", "chat_id"),
-            "text": message}
+            "text": escape_specials(message)}
     data.update(kwargs)
     bot_url = f"https://api.telegram.org/bot{config.get('DEFAULT', 'token')}/sendMessage"
     return post(bot_url, data=data)
