@@ -43,5 +43,6 @@ def get_config() -> ConfigParser:
     return config
 
 
-def validate_config(config: ConfigParser) -> bool:
+def config_is_valid() -> bool:
+    config = get_config()
     return config.has_option("DEFAULT", "chat_id") and config.has_option("DEFAULT", "token")
