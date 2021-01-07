@@ -1,5 +1,5 @@
 from datetime import datetime
-from .tools import send_message, escape_specials, CONFIG_PATH, initialize_config, get_config
+from .tools import send_message, escape_specials, CONFIG_PATH, get_config
 import traceback
 
 

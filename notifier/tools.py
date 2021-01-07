@@ -18,15 +18,6 @@ def send_message(message: str, **kwargs) -> Optional[Response]:
     return post(bot_url, data=data)
 
 
-def initialize_config():
-    if not os.path.exists(CONFIG_PATH):
-        config = ConfigParser()
-        config.add_section("DEFAULT")
-        config["DEFAULT"] = {"chat_id": "", "token": ""}
-        with open(CONFIG_PATH, 'w') as config_stream:
-            config.write(config_stream)
-
-
 def escape_specials(to_escape: str) -> str:
     return to_escape.replace("\\", "/").replace("/", "\/").replace("-", "\-").replace(".", "\.")
 
