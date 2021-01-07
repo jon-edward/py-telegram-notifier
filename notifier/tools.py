@@ -32,8 +32,7 @@ def escape_specials(to_escape: str) -> str:
     return to_escape.replace("\\", "/").replace("/", "\/").replace("-", "\-").replace(".", "\.")
 
 
-def update_config(chat_id=None, token=None) -> None:
-    """Updates config globally. ignores chat_id and token if None"""
+def set_config_options(chat_id=None, token=None) -> None:
     config = ConfigParser()
     if config_is_valid():
         config.read(CONFIG_PATH)

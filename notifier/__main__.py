@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import argparse
-from .tools import send_message, update_config, get_config, config_is_valid
+from .tools import send_message, set_config_options, get_config, config_is_valid
 
 
 if __name__ == "__main__":
@@ -12,7 +12,7 @@ if __name__ == "__main__":
     arg_parser.add_argument("--text", type=str, help="specifies the message to send to chat")
     args = arg_parser.parse_args()
 
-    update_config(chat_id=args.chat_id, token=args.token)
+    set_config_options(chat_id=args.chat_id, token=args.token)
     config = get_config()
 
     if not config_is_valid():
