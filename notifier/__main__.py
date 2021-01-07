@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import argparse
-from .tools import send_message, set_config_options, get_config, config_is_valid, InvalidConfigError
+from .tools import send_message, set_config_options, get_config, config_is_valid, InvalidConfigError, EmptyMessageError
 
 if __name__ == "__main__":
     arg_parser = argparse.ArgumentParser(description="A simple usage of the Telegram Bot API.",
@@ -19,3 +19,5 @@ if __name__ == "__main__":
 
     if args.text:
         print(send_message(args.text))
+    elif args.text is "":
+        raise EmptyMessageError("Cannot use an empty string with --text option.")
