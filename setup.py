@@ -7,7 +7,7 @@ setuptools.setup(
     name="py_telegram_notifier",
     version="0.0.1",
     author="Jonathan Townsend",
-    description="Simple notifier utilizing the Telegram Bot API. This can be done by the " +
+    description="Simple notifier utilizing the Telegram Bot API. This can be used by the " +
                 "command line, by method call, or with a context manager.",
     long_description=long_description,
     long_description_content_type="text/markdown",
