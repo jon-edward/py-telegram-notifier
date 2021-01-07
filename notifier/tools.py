@@ -1,4 +1,3 @@
-import os
 from configparser import ConfigParser
 from requests import post, Response
 from typing import Optional
