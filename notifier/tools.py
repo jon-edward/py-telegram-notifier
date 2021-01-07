@@ -6,11 +6,21 @@ from typing import Optional
 CONFIG_PATH = "config.ini"
 
 
+class EmptyMessageError(Exception):
+    pass
+
+
+class InvalidConfigError(Exception):
+    pass
+
+
 def send_message(message: str, **kwargs) -> Optional[Response]:
+    if not config_is_valid():
+        raise InvalidConfigError("Required config options not defined.")
     config = ConfigParser()
     config.read(CONFIG_PATH)
     if not message:
-        return
+        raise EmptyMessageError("Sent message cannot be empty.")
     data = {"chat_id": config.get("DEFAULT", "chat_id"),
             "text": escape_specials(message)}
     data.update(kwargs)
@@ -25,7 +35,7 @@ def escape_specials(to_escape: str) -> str:
 def update_config(chat_id=None, token=None) -> None:
     """Updates config globally. ignores chat_id and token if None"""
     config = ConfigParser()
-    if os.path.exists(CONFIG_PATH):
+    if config_is_valid():
         config.read(CONFIG_PATH)
     else:
         config["DEFAULT"] = {"chat_id": "", "token": ""}
