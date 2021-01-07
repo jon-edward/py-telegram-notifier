@@ -1,5 +1,5 @@
 from datetime import datetime
-from .tools import Config, send_message, get_settings_path, escape_specials
+from .tools import send_message, escape_specials, CONFIG_PATH, initialize_config, get_config
 import traceback
 
 
@@ -14,13 +14,12 @@ class Notifier:
         self.started_message_format = started_message_format
         self.description = description
         self.start_time = None
-        self.config = Config(from_file=get_settings_path())
 
     def __enter__(self):
         self.start_time = datetime.now()
         message = self.started_message_format.format(description=self.description)
         escaped_message = escape_specials(message)
-        print(send_message(self.config, escaped_message, parse_mode="MarkdownV2"))
+        print(send_message(escaped_message, parse_mode="MarkdownV2"))
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         if exc_type is None:
@@ -29,7 +28,7 @@ class Notifier:
                                                            process=id(self),
                                                            description=self.description)
             escaped_message = escape_specials(message)
-            print(send_message(self.config, escaped_message, parse_mode="MarkdownV2"))
+            print(send_message(escaped_message, parse_mode="MarkdownV2"))
         else:
             formatted_tb = "\n".join(traceback.format_tb(exc_tb)).strip()
             message = self.failed_message_format.format(exc_type=exc_type.__name__,
@@ -38,4 +37,4 @@ class Notifier:
                                                         process=id(self),
                                                         description=self.description)
             escaped_message = escape_specials(message)
-            print(send_message(self.config, escaped_message, parse_mode="MarkdownV2"))
+            print(send_message(escaped_message, parse_mode="MarkdownV2"))
