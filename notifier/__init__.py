@@ -26,7 +26,7 @@ class Notifier:
         exit_message_format = self.succeeded_message_format if exc_type is None else self.failed_message_format
         formatted_tb = "\n".join(traceback.format_tb(exc_tb)).strip()
         message = exit_message_format.format(time_duration=time_duration,
-                                             exc_type=exc_type.__name__,
+                                             exc_type="" if exc_type is None else exc_type.__name__,
                                              exc_val=exc_val,
                                              exc_tb=formatted_tb,
                                              description=self.description)
