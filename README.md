@@ -23,7 +23,7 @@ token = "0000000000" # Your bot token
 set_config_options(chat_id=chat_id, token=token)
 ```
 Then, you may use a Notifier as a context manager that will notify you of the type of exit 
-that was encountered, including whether it finished with an error or finished without error.
+that was encountered, including whether it finished with or without an error.
 ```python
 from telegram_notifier import Notifier
 
