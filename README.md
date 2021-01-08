@@ -45,3 +45,7 @@ Send a message to a chat once the settings are saved:
     telegram_notifier --message ZZZZ
     
 - ``ZZZZ`` the message to send.
+
+## Disclaimer
+This project is not affiliated, associated, authorized, endorsed by, or in any way officially 
+connected with Telegram.
