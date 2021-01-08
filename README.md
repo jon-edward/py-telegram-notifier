@@ -7,7 +7,7 @@ a context manager, method calls, or a CLI.
 
 ## Requirements
 In order for the module to function, you must supply it with a bot 
-[token](https://core.telegram.org/bots/api#making-requests), and a 
+[token](https://core.telegram.org/bots/api#authorizing-your-bot), and a 
 [chat id](https://core.telegram.org/bots/api#sendmessage). Full instructions on creating a bot 
 can be found [here](https://core.telegram.org/bots#3-how-do-i-create-a-bot).
 
