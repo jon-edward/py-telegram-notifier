@@ -19,5 +19,5 @@ if __name__ == "__main__":
 
     if args.message:
         print(send_message(args.message))
-    elif args.text is "":
+    elif args.message is "":
         raise EmptyMessageError("Cannot use an empty string with --message option.")
