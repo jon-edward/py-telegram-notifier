@@ -12,7 +12,7 @@ In order for the module to function, you must supply it with a bot
 can be found [here](https://core.telegram.org/bots#3-how-do-i-create-a-bot).
 
 ## Usage as context manager
-Firstly, set up config for your Notifier. This only has to be done once, assuming you are 
+Firstly, set up the config for your Notifier. This only has to be done once, assuming you are 
 sending messages from the same bot to the same chat every time.
 ```python
 from telegram_notifier.tools import set_config_options
