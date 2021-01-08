@@ -1,6 +1,7 @@
 from configparser import ConfigParser
 from requests import post, Response
 from typing import Optional
+import json
 
 CONFIG_PATH = "config.ini"
 
@@ -28,7 +29,7 @@ def send_message(message: str, **kwargs) -> Optional[Response]:
 
 
 def escape_specials(to_escape: str) -> str:
-    return to_escape.replace("\\", "/").replace("/", "\/").replace("-", "\-").replace(".", "\.")
+    return to_escape.replace(".", "\\.").replace("-", "\\-")
 
 
 def set_config_options(chat_id=None, token=None) -> None:
@@ -57,3 +58,10 @@ def config_is_valid() -> bool:
         return bool(config.get("DEFAULT", "chat_id")) and bool(config.get("DEFAULT", "token"))
     else:
         return False
+
+
+def process_response(response: Response) -> str:
+    if response.ok:
+        return "telegram_notifier: Notification sent"
+    else:
+        return f"telegram_notifier: Error {response.text}"
