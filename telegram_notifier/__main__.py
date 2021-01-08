@@ -17,7 +17,7 @@ if __name__ == "__main__":
     if not config_is_valid():
         raise InvalidConfigError("Settings not valid. Use --token and --chat_id options to set settings entries.")
 
-    if args.text:
+    if args.message:
         print(send_message(args.message))
     elif args.text is "":
         raise EmptyMessageError("Cannot use an empty string with --message option.")
