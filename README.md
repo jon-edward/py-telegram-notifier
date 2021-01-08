@@ -47,5 +47,6 @@ Send a message to a chat once the settings are saved:
 - ``ZZZZ`` the message to send.
 
 ## Disclaimer
-This project is not affiliated, associated, authorized, endorsed by, or in any way officially 
-connected with Telegram.
+The author of this software is not affiliated, associated, authorized, endorsed by, or in any 
+way officially connected with Telegram or any of its affiliates and is independently owned and 
+created. 
