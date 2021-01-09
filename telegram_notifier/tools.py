@@ -1,8 +1,9 @@
 from configparser import ConfigParser
 from requests import post, Response
+import os
 from typing import Optional
 
-CONFIG_PATH = "config.ini"
+CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config.ini")
 
 
 class EmptyMessageError(Exception):
