@@ -1,7 +1,7 @@
 from configparser import ConfigParser
 from requests import post, Response
 import os
-from typing import Optional
+from typing import Optional, Union
 
 CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config.ini")
 
@@ -32,14 +32,14 @@ def escape_specials(to_escape: str) -> str:
     return to_escape.replace(".", "\\.").replace("-", "\\-")
 
 
-def set_config_options(chat_id=None, token=None) -> None:
+def set_config_options(chat_id: Optional[Union[str, int]] = None, token: Optional[str] = None) -> None:
     config = ConfigParser()
     if config_is_valid():
         config.read(CONFIG_PATH)
     else:
         config["DEFAULT"] = {"chat_id": "", "token": ""}
     if chat_id is not None:
-        config["DEFAULT"]["chat_id"] = chat_id
+        config["DEFAULT"]["chat_id"] = str(chat_id)
     if token is not None:
         config["DEFAULT"]["token"] = token
     with open(CONFIG_PATH, 'w') as config_stream:
