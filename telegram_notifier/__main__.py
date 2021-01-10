@@ -11,7 +11,6 @@ if __name__ == "__main__":
     args = arg_parser.parse_args()
 
     set_config_options(chat_id=args.chat_id, token=args.token)
-    config = get_config()
 
     if args.message:
         if not config_is_valid():
