@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import argparse
-from .tools import send_message, set_config_options, get_config, config_is_valid, InvalidConfigError, EmptyMessageError
+from . import *
 
 if __name__ == "__main__":
     arg_parser = argparse.ArgumentParser(description="A simple usage of the Telegram Bot API.", allow_abbrev=True)

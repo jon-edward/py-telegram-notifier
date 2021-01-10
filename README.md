@@ -15,7 +15,7 @@ can be found [here](https://core.telegram.org/bots#3-how-do-i-create-a-bot).
 Firstly, set up the config for your Notifier. This only has to be done once, assuming you are 
 sending messages from the same bot to the same chat every time.
 ```python
-from telegram_notifier.tools import set_config_options
+from telegram_notifier import set_config_options
 
 chat_id = 0000000000 # Your chat id
 token = "0000000000" # Your bot token
