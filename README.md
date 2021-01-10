@@ -1,6 +1,6 @@
 # py-telegram-notifier
 A simple utilization of the Telegram Bot API for sending messages to a Telegram chat by means of 
-a context manager, method calls, or a CLI.
+a context manager, function calls, or a CLI.
 
 ## Installation
     pip install py-telegram-notifier
