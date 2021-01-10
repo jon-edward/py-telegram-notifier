@@ -13,10 +13,9 @@ if __name__ == "__main__":
     set_config_options(chat_id=args.chat_id, token=args.token)
     config = get_config()
 
-    if not config_is_valid():
-        raise InvalidConfigError("Settings not valid. Use --token and --chat_id options to set settings entries.")
-
     if args.message:
+        if not config_is_valid():
+            raise InvalidConfigError("Settings not valid. Use --token and --chat_id options to set settings entries.")
         print(send_message(args.message))
     elif args.message == "":
         raise EmptyMessageError("Cannot use an empty string with --message option.")
