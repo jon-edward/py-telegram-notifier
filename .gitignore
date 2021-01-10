@@ -8,6 +8,9 @@
 *.egg-info
 dist/
 
+# Virtual env
+venv/
+
 # Bytecode
 __pycache__/
 *.pyc

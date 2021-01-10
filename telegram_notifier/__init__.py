@@ -1,4 +1,3 @@
-from datetime import datetime
 from .tools import send_message, escape_specials, process_response
 import traceback
 
