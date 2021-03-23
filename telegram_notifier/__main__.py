@@ -13,7 +13,7 @@ if __name__ == "__main__":
     set_config_options(chat_id=args.chat_id, token=args.token)
 
     if args.message:
-        if not config_is_valid():
+        if not validate_config(get_config()):
             raise InvalidConfigError("Settings not valid. Use --token and --chat_id options to set settings entries.")
         print(send_message(args.message))
     elif args.message == "":
