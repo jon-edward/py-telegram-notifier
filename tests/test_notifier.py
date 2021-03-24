@@ -54,7 +54,8 @@ class NotifierTest(unittest.TestCase):
             with Notifier("Test case", failed_message_format=failed_message_format, suppress_verbosity=True):
                 x = 1 / 0
         except ZeroDivisionError:
-            self.assertEqual(get_text_of_last_request(), "ZeroDivisionError")
+            pass
+        self.assertEqual(get_text_of_last_request(), "ZeroDivisionError")
 
     def test_should_send_error_value_when_failed(self):
         failed_message_format = "{exc_val}"
@@ -62,7 +63,8 @@ class NotifierTest(unittest.TestCase):
             with Notifier("Test case", failed_message_format=failed_message_format, suppress_verbosity=True):
                 x = 1 / 0
         except ZeroDivisionError:
-            self.assertEqual(get_text_of_last_request(), "division by zero")
+            pass
+        self.assertEqual(get_text_of_last_request(), "division by zero")
 
     def test_should_send_description_when_failed(self):
         failed_message_format = "{description}"
@@ -71,7 +73,8 @@ class NotifierTest(unittest.TestCase):
             with Notifier(description=description, failed_message_format=failed_message_format, suppress_verbosity=True):
                 x = 1 / 0
         except ZeroDivisionError:
-            self.assertEqual(get_text_of_last_request(), escape_specials(description))
+            pass
+        self.assertEqual(get_text_of_last_request(), escape_specials(description))
 
     def test_should_pass_exception_outside_of_notifier_block(self):
         with self.assertRaises(ZeroDivisionError):
