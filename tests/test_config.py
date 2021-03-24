@@ -1,5 +1,5 @@
 import telegram_notifier
-from telegram_notifier import set_config_options, Notifier, get_config, validate_config, InvalidConfigError
+from telegram_notifier import set_config_options, Notifier, get_config, InvalidConfigError
 import os
 import unittest
 
