@@ -65,5 +65,6 @@ class ConfigTest(unittest.TestCase):
         with Notifier("Test case", suppress_verbosity=True):
             pass
 
+
 if __name__ == '__main__':
     unittest.main()
