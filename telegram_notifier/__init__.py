@@ -80,7 +80,7 @@ class Notifier:
         failed_message_format: str = '`"{description}"`\n*_{exc_type}_* - {exc_val}\n```python\n{exc_tb}```',
         succeeded_message_format: str = '`"{description}"` completed successfully.',
         started_message_format: str = '`"{description}"` started',
-        suppress_verbosity: bool = False
+        suppress_verbosity: bool = False,
     ):
         self.failed_message_format = failed_message_format
         self.succeeded_message_format = succeeded_message_format

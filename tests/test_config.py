@@ -1,5 +1,10 @@
 import telegram_notifier
-from telegram_notifier import set_config_options, Notifier, get_config, InvalidConfigError
+from telegram_notifier import (
+    set_config_options,
+    Notifier,
+    get_config,
+    InvalidConfigError,
+)
 import os
 import unittest
 
@@ -44,7 +49,9 @@ class ConfigTest(unittest.TestCase):
         self.assertEqual(get_config()["DEFAULT"]["chat_id"], str(chat_id))
         self.assertEqual(get_config()["DEFAULT"]["token"], token)
 
-    def test_should_raise_an_error_when_notifier_is_initialized_with_an_invalid_config(self):
+    def test_should_raise_an_error_when_notifier_is_initialized_with_an_invalid_config(
+        self,
+    ):
         chat_id = 100
         token = "MyBot"
         self.assertFalse(os.path.exists(TESTING_CONFIG_PATH))
@@ -66,5 +73,5 @@ class ConfigTest(unittest.TestCase):
             pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
