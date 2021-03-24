@@ -46,12 +46,7 @@ def escape_specials(to_escape: str) -> str:
 def set_config_options(
     chat_id: Optional[Union[str, int]] = None, token: Optional[str] = None
 ) -> None:
-    config = ConfigParser()
-    stored_config = get_config()
-    if validate_config(stored_config):
-        config = stored_config
-    else:
-        config["DEFAULT"] = {"chat_id": "", "token": ""}
+    config = get_config()
     if chat_id is not None:
         config["DEFAULT"]["chat_id"] = str(chat_id)
     if token is not None:
@@ -85,16 +80,19 @@ class Notifier:
         failed_message_format: str = '`"{description}"`\n*_{exc_type}_* - {exc_val}\n```python\n{exc_tb}```',
         succeeded_message_format: str = '`"{description}"` completed successfully.',
         started_message_format: str = '`"{description}"` started',
+        suppress_verbosity: bool = False
     ):
         self.failed_message_format = failed_message_format
         self.succeeded_message_format = succeeded_message_format
         self.started_message_format = started_message_format
         self.description = description
+        self.suppress_verbosity = suppress_verbosity
 
     def __enter__(self):
         message = self.started_message_format.format(description=self.description)
         response = send_message(message, parse_mode="MarkdownV2")
-        print(process_response(response))
+        if not self.suppress_verbosity:
+            print(process_response(response))
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         exit_message_format = (
@@ -111,4 +109,5 @@ class Notifier:
         }
         message = exit_message_format.format(**format_data)
         response = send_message(message, parse_mode="MarkdownV2")
-        print(process_response(response))
+        if not self.suppress_verbosity:
+            print(process_response(response))
