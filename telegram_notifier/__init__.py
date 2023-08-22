@@ -3,6 +3,7 @@ from requests import post, Response
 import os
 from typing import Optional, Union
 import traceback
+from . import *
 
 
 CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config.ini")
@@ -22,7 +23,7 @@ def get_config() -> ConfigParser:
     return config
 
 
-def send_message(message: str, **kwargs) -> Optional[Response]:
+def send_message(message: str, no_escape: bool=False, **kwargs) -> Optional[Response]:
     if not validate_config(get_config()):
         raise InvalidConfigError("Required config options not defined.")
     config = get_config()
@@ -30,7 +31,7 @@ def send_message(message: str, **kwargs) -> Optional[Response]:
         raise EmptyMessageError("Sent message cannot be empty.")
     data = {
         "chat_id": config.get("DEFAULT", "chat_id"),
-        "text": escape_specials(message),
+        "text": escape_specials(message) if not no_escape else message 
     }
     data.update(kwargs)
     bot_url = (

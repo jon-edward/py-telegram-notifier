@@ -12,6 +12,7 @@ if __name__ == "__main__":
     arg_parser.add_argument(
         "--message", type=str, help="specifies the message to send to chat"
     )
+    arg_parser.add_argument("--no_escape", action="store_true", required=False,help="no escape the special characters (e.g. '.', '-') ")
     args = arg_parser.parse_args()
 
     set_config_options(chat_id=args.chat_id, token=args.token)
@@ -21,6 +22,9 @@ if __name__ == "__main__":
             raise InvalidConfigError(
                 "Settings not valid. Use --token and --chat_id options to set settings entries."
             )
-        print(send_message(args.message))
+        if args.no_escape:
+            print(send_message(args.message, args.no_escape))
+        else:
+            print(send_message(args.message))
     elif args.message == "":
         raise EmptyMessageError("Cannot use an empty string with --message option.")
