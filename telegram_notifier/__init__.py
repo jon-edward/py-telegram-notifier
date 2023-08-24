@@ -9,20 +9,33 @@ CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config.ini")
 
 
 class EmptyMessageError(Exception):
-    pass
+    """
+    An error reported when attempting to send an empty message.
+    """
 
 
 class InvalidConfigError(Exception):
-    pass
+    """
+    An error reported when config values are not fully satisfied.
+    """
 
 
 def get_config() -> ConfigParser:
+    """
+    Gets config options from local installation.
+    """
+
     config = ConfigParser()
     config.read(CONFIG_PATH)
     return config
 
 
 def send_message(message: str, no_escape: bool = False, **kwargs) -> Optional[Response]:
+    """
+    Sends a message to a Telegram chat. If `no_escape` is True, does not attempt to escape 
+    special characters.
+    """
+
     if not validate_config(get_config()):
         raise InvalidConfigError("Required config options not defined.")
     config = get_config()
@@ -40,12 +53,20 @@ def send_message(message: str, no_escape: bool = False, **kwargs) -> Optional[Re
 
 
 def escape_specials(to_escape: str) -> str:
+    """
+    Escapes characters special to the Telegram chat.
+    """
+
     return to_escape.replace(".", "\\.").replace("-", "\\-")
 
 
 def set_config_options(
     chat_id: Optional[Union[str, int]] = None, token: Optional[str] = None
 ) -> None:
+    """
+    Sets config options local to the telegram-notifier installation.
+    """
+
     config = get_config()
     if chat_id is not None:
         config["DEFAULT"]["chat_id"] = str(chat_id)
@@ -56,6 +77,10 @@ def set_config_options(
 
 
 def validate_config(config: ConfigParser) -> bool:
+    """
+    Returns True if local config has sufficient entries to send messages.
+    """
+
     if config.has_option("DEFAULT", "chat_id") and config.has_option(
         "DEFAULT", "token"
     ):
@@ -67,6 +92,10 @@ def validate_config(config: ConfigParser) -> bool:
 
 
 def process_response(response: Response) -> str:
+    """
+    Translates a Response to a human-readable description.
+    """
+
     if response.ok:
         return "telegram_notifier: Notification sent"
     else:
@@ -74,6 +103,11 @@ def process_response(response: Response) -> str:
 
 
 class Notifier:
+    """
+    Functions as a context manager, with default behavior of sending a message to a Telegram chat on entrance/exit of a 
+    block of code.
+    """
+
     def __init__(
         self,
         description: str = "",
