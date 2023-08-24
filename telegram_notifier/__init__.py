@@ -32,7 +32,7 @@ def get_config() -> ConfigParser:
 
 def send_message(message: str, no_escape: bool = False, **kwargs) -> Optional[Response]:
     """
-    Sends a message to a Telegram chat. If `no_escape` is True, does not attempt to escape 
+    Sends a message to a Telegram chat. If `no_escape` is True, does not attempt to escape
     special characters.
     """
 
@@ -104,7 +104,7 @@ def process_response(response: Response) -> str:
 
 class Notifier:
     """
-    Functions as a context manager, with default behavior of sending a message to a Telegram chat on entrance/exit of a 
+    Functions as a context manager, with default behavior of sending a message to a Telegram chat on entrance/exit of a
     block of code.
     """
 
