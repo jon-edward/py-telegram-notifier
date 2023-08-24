@@ -8,7 +8,6 @@ setuptools.setup(
     version="0.2.1",
     author="Jonathan Townsend",
     description="A simple notifier for sending a message to a Telegram chat using the Telegram Bot API."
-    + "command line, by function call, or with a context manager.",
     install_requires=[
         "requests",
     ],
