@@ -57,7 +57,7 @@ def escape_specials(to_escape: str) -> str:
     Escapes characters special to the Telegram chat.
     """
 
-    return to_escape.replace(".", "\\.").replace("-", "\\-")
+    return to_escape.replace("\\", "\\\\").replace(".", "\\.").replace("-", "\\-")
 
 
 def set_config_options(
