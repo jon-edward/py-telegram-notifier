@@ -3,7 +3,6 @@ from requests import post, Response
 import os
 from typing import Optional, Union
 import traceback
-from . import *
 
 
 CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config.ini")
