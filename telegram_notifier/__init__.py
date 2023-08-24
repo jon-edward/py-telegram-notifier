@@ -22,7 +22,7 @@ def get_config() -> ConfigParser:
     return config
 
 
-def send_message(message: str, no_escape: bool=False, **kwargs) -> Optional[Response]:
+def send_message(message: str, no_escape: bool = False, **kwargs) -> Optional[Response]:
     if not validate_config(get_config()):
         raise InvalidConfigError("Required config options not defined.")
     config = get_config()
@@ -30,7 +30,7 @@ def send_message(message: str, no_escape: bool=False, **kwargs) -> Optional[Resp
         raise EmptyMessageError("Sent message cannot be empty.")
     data = {
         "chat_id": config.get("DEFAULT", "chat_id"),
-        "text": escape_specials(message) if not no_escape else message 
+        "text": escape_specials(message) if not no_escape else message,
     }
     data.update(kwargs)
     bot_url = (

@@ -12,7 +12,12 @@ if __name__ == "__main__":
     arg_parser.add_argument(
         "--message", type=str, help="specifies the message to send to chat"
     )
-    arg_parser.add_argument("--no_escape", action="store_true", required=False, help="do not escape special characters (e.g. '.', '-')")
+    arg_parser.add_argument(
+        "--no_escape",
+        action="store_true",
+        required=False,
+        help="do not escape special characters (e.g. '.', '-')",
+    )
     args = arg_parser.parse_args()
 
     set_config_options(chat_id=args.chat_id, token=args.token)
