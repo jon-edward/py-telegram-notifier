@@ -1,5 +1,7 @@
 # py-telegram-notifier
 
+[![PyPI Downloads](https://static.pepy.tech/badge/py-telegram-notifier)](https://pepy.tech/projects/py-telegram-notifier)
+
 A tool using the Telegram Bot API for sending messages to a Telegram chat by
 a context manager, function call, or CLI.
 
