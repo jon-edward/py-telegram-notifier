@@ -5,9 +5,9 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="py_telegram_notifier",
-    version="0.2.4",
+    version="1.0.0",
     author="Jonathan Townsend",
-    description="A simple notifier for sending a message to a Telegram chat using the Telegram Bot API.",
+    description="A tool using the Telegram Bot API for sending messages to a Telegram chat by a context manager, function call, or CLI.",
     install_requires=[
         "requests",
     ],

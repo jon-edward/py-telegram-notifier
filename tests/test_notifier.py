@@ -1,12 +1,11 @@
-import telegram_notifier
-from telegram_notifier import Notifier, escape_specials, EmptyMessageError
+from telegram_notifier import Notifier
 import httpretty
 import os
 import unittest
 
 
-TESTING_CHAT_ID, TESTING_BOT_TOKEN = 100, "MyBot"  # Arbitrary
-TESTING_CONFIG_PATH = os.path.join(os.path.dirname(__file__), "test_config.ini")
+TESTING_BOT_TOKEN = "0000000000"
+TESTING_CHAT_ID = "0000000000"
 
 
 def get_text_of_last_request():
@@ -16,11 +15,9 @@ def get_text_of_last_request():
 class NotifierTest(unittest.TestCase):
     def setUp(self) -> None:
         httpretty.enable()
-        telegram_notifier.CONFIG_PATH = TESTING_CONFIG_PATH
 
-        telegram_notifier.set_config_options(
-            token=TESTING_BOT_TOKEN, chat_id=TESTING_CHAT_ID
-        )
+        os.environ["TELEGRAM_TOKEN"] = TESTING_BOT_TOKEN
+        os.environ["TELEGRAM_CHAT_ID"] = TESTING_CHAT_ID
 
         httpretty.register_uri(
             method=httpretty.POST,
@@ -29,87 +26,80 @@ class NotifierTest(unittest.TestCase):
         )
 
     def tearDown(self) -> None:
-        os.remove(TESTING_CONFIG_PATH)
+        os.environ.pop("TELEGRAM_CHAT_ID", None)
+        os.environ.pop("TELEGRAM_TOKEN", None)
+
         httpretty.disable()
         httpretty.reset()
 
-    def test_should_safely_send_message_to_bot_by_escaping_special_characters(self):
-        message_to_send = "This contains special characters...-"
-        expected_message = "This contains special characters\\.\\.\\.\\-"
-        with Notifier(
-            "Test case",
-            succeeded_message_format=message_to_send,
-            suppress_verbosity=True,
-        ):
-            # Note: "suppress_verbosity" simply turns off messages printing to the console for clarity in testing.
-            pass
-        self.assertEqual(get_text_of_last_request(), expected_message)
-
-    def test_should_raise_error_when_sent_message_is_empty(self):
-        empty_message_to_send = ""
-        with self.assertRaises(EmptyMessageError):
-            with Notifier(
-                "Test case",
-                succeeded_message_format=empty_message_to_send,
-                suppress_verbosity=True,
-            ):
-                pass
-
     def test_should_send_error_type_when_failed(self):
-        failed_message_format = "{exc_type}"
+        def failed_message_format(_desc, exc_type, _exc_val, _exc_tb):
+            return f"{exc_type.__name__}"
+
         try:
-            with Notifier(
-                "Test case",
-                failed_message_format=failed_message_format,
-                suppress_verbosity=True,
-            ):
-                x = 1 / 0
+            with Notifier("Test case") as notifier:
+                notifier.failed_message = failed_message_format
+                _ = 1 / 0
         except ZeroDivisionError:
             pass
+
         self.assertEqual(get_text_of_last_request(), "ZeroDivisionError")
 
     def test_should_send_error_value_when_failed(self):
-        failed_message_format = "{exc_val}"
+        def failed_message_format(_desc, _exc_type, exc_val, _exc_tb):
+            return f"{exc_val}"
+
         try:
-            with Notifier(
-                "Test case",
-                failed_message_format=failed_message_format,
-                suppress_verbosity=True,
-            ):
-                x = 1 / 0
+            with Notifier("Test case") as notifier:
+                notifier.failed_message = failed_message_format
+                _ = 1 / 0
         except ZeroDivisionError:
             pass
+
         self.assertEqual(get_text_of_last_request(), "division by zero")
 
     def test_should_send_description_when_failed(self):
-        failed_message_format = "{description}"
+        def failed_message_format(desc, _exc_type, _exc_val, _exc_tb):
+            return f"{desc}"
+
         description = "Test case"
+
         try:
-            with Notifier(
-                description=description,
-                failed_message_format=failed_message_format,
-                suppress_verbosity=True,
-            ):
-                x = 1 / 0
+            with Notifier(description) as notifier:
+                notifier.failed_message = failed_message_format
+                _ = 1 / 0
         except ZeroDivisionError:
             pass
-        self.assertEqual(get_text_of_last_request(), escape_specials(description))
+
+        self.assertEqual(get_text_of_last_request(), description)
 
     def test_should_pass_exception_outside_of_notifier_block(self):
         with self.assertRaises(ZeroDivisionError):
-            with Notifier("Test case", suppress_verbosity=True):
-                x = 1 / 0
+            with Notifier("Test case"):
+                _ = 1 / 0
 
     def test_should_send_description_when_succeeded(self):
+        def succeeded_message_format(desc):
+            return f"{desc}"
+
         description = "Test case"
-        succeeded_message_format = "{description}"
-        with Notifier(
-            description=description,
-            succeeded_message_format=succeeded_message_format,
-            suppress_verbosity=True,
-        ):
-            pass
+
+        with Notifier(description) as notifier:
+            notifier.succeeded_message = succeeded_message_format
+
         self.assertEqual(get_text_of_last_request(), description)
+
+    def test_should_send_description_when_started(self):
+        def started_message_format(desc):
+            return f"{desc}"
+
+        description = "Test case"
+
+        notifier = Notifier(description)
+        notifier.started_message = started_message_format
+
+        with notifier:
+            self.assertEqual(get_text_of_last_request(), description)
 
 
 if __name__ == "__main__":

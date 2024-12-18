@@ -1,76 +1,58 @@
-import telegram_notifier
-from telegram_notifier import (
-    set_config_options,
-    Notifier,
-    get_config,
-    InvalidConfigError,
-)
+from telegram_notifier import get_config, Notifier
 import os
 import unittest
 
 
 TESTING_CONFIG_PATH = os.path.join(os.path.dirname(__file__), "test_config.ini")
 
+TESTING_BOT_TOKEN = "0000000000"
+TESTING_CHAT_ID = "0000000000"
+
 
 class ConfigTest(unittest.TestCase):
     def setUp(self) -> None:
-        telegram_notifier.CONFIG_PATH = TESTING_CONFIG_PATH
+        os.environ.pop("TELEGRAM_CHAT_ID", None)
+        os.environ.pop("TELEGRAM_TOKEN", None)
 
     def tearDown(self) -> None:
-        if os.path.exists(TESTING_CONFIG_PATH):
-            os.remove(TESTING_CONFIG_PATH)
+        os.environ.pop("TELEGRAM_CHAT_ID", None)
+        os.environ.pop("TELEGRAM_TOKEN", None)
 
-    def test_should_create_config_file_when_none_exists(self):
-        self.assertFalse(os.path.exists(TESTING_CONFIG_PATH))
-        set_config_options()
-        self.assertTrue(os.path.exists(TESTING_CONFIG_PATH))
+    def test_get_successful_config(self):
+        os.environ["TELEGRAM_CHAT_ID"] = TESTING_CHAT_ID
+        os.environ["TELEGRAM_TOKEN"] = TESTING_BOT_TOKEN
 
-    def test_should_safely_get_empty_config_when_none_exists(self):
-        self.assertFalse(os.path.exists(TESTING_CONFIG_PATH))
         config = get_config()
-        self.assertTrue(config)
-        self.assertFalse(config.has_option("DEFAULT", "chat_id"))
-        self.assertFalse(config.has_option("DEFAULT", "token"))
 
-    def test_should_set_options_of_config(self):
-        # Potential gotcha: Because of how the config is stored, set_config_options will accept an integer for chat_id,
-        # but it will save and reload it as a string.
-        chat_id = 100
-        token = "MyBot"
-        set_config_options(chat_id=chat_id, token=token)
-        self.assertEqual(get_config()["DEFAULT"]["chat_id"], str(chat_id))
-        self.assertEqual(get_config()["DEFAULT"]["token"], token)
+        self.assertEqual(config.chat_id, TESTING_CHAT_ID)
+        self.assertEqual(config.token, TESTING_BOT_TOKEN)
 
-    def test_should_set_options_of_config_separately(self):
-        chat_id = 100
-        token = "MyBot"
-        set_config_options(chat_id=chat_id)
-        set_config_options(token=token)
-        self.assertEqual(get_config()["DEFAULT"]["chat_id"], str(chat_id))
-        self.assertEqual(get_config()["DEFAULT"]["token"], token)
+    def test_get_incomplete_config(self):
+        # Missing TELEGRAM_CHAT_ID and TELEGRAM_TOKEN
+        with self.assertRaises(ValueError):
+            get_config()
 
-    def test_should_raise_an_error_when_notifier_is_initialized_with_an_invalid_config(
-        self,
-    ):
-        chat_id = 100
-        token = "MyBot"
-        self.assertFalse(os.path.exists(TESTING_CONFIG_PATH))
+        # Missing TELEGRAM_CHAT_ID
+        os.environ["TELEGRAM_TOKEN"] = TESTING_BOT_TOKEN
+        with self.assertRaises(ValueError):
+            get_config()
+        os.environ.pop("TELEGRAM_TOKEN", None)
 
-        with self.assertRaises(InvalidConfigError):
-            with Notifier("Test case", suppress_verbosity=True):
-                pass
+        # Missing TELEGRAM_TOKEN
+        os.environ["TELEGRAM_CHAT_ID"] = TESTING_CHAT_ID
+        with self.assertRaises(ValueError):
+            get_config()
 
-        set_config_options(chat_id=chat_id)
+    def test_should_get_config_from_env_on_init(self):
+        os.environ["TELEGRAM_CHAT_ID"] = TESTING_CHAT_ID
+        os.environ["TELEGRAM_TOKEN"] = TESTING_BOT_TOKEN
 
-        with self.assertRaises(InvalidConfigError):
-            with Notifier("Test case", suppress_verbosity=True):
-                pass
+        notifier = Notifier()
 
-        set_config_options(token=token)
-        # Both necessary options are set at this point.
+        config = notifier.config
 
-        with Notifier("Test case", suppress_verbosity=True):
-            pass
+        self.assertEqual(config.chat_id, TESTING_CHAT_ID)
+        self.assertEqual(config.token, TESTING_BOT_TOKEN)
 
 
 if __name__ == "__main__":
